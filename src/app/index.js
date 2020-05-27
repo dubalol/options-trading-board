@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from 'react-redux';
 
 import { wsConnect, wsDisconnect } from '../services/options/actions';
-import { setInitialDataIfNeeded } from "../services/options/actions";
+import { setInitialDataIfNeeded, update } from "../services/options/actions";
 
 import Exchange from '../scenes/Exchange'
 
@@ -24,9 +24,11 @@ class App extends React.Component {
   };
 
   render() {
+    const { dispatch } = this.props;
     return(
       <div>
         Hello World
+        <button onClick={() => dispatch(update())}>Updater</button>
         <Exchange />
       </div>
     )

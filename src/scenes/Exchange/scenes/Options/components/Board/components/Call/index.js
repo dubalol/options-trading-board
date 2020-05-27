@@ -1,6 +1,6 @@
 import React from "react"
 import { connect } from "react-redux";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 const mapStateToProps = (state, ownProps) => ({
   openInterest: state.contracts[ownProps.id].open_interest,
@@ -24,13 +24,21 @@ class Call extends React.Component {
 const Div = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  justify-items: end;
+  justify-items: center;
+  transition: all .2s ease-in;
+  &:hover {
+    background-color: pink;
+  }
 `;
 
 const Span = styled.span`
   border: 1px solid black;
   text-align: right;
   width: 80%;
+  transition: all .2s ease-in;
+  &:hover {
+    background-color: red;
+  }
 `;
 
 export default connect(mapStateToProps)(Call);

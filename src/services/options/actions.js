@@ -7,6 +7,8 @@ import {
 
 import { getContracts, getBookTops } from "./api";
 
+export const update = () => ({ type: UPDATE_CONTRACT })
+
 // WebSocket actions
 export const wsConnect = host => ({ type: WS_CONNECT, host })
 // export const wsConnecting = host => ({ type: WS_CONNECTING, host })

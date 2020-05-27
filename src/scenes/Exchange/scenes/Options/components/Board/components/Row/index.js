@@ -1,5 +1,5 @@
 import React from "react"
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 import Call from "../Call"
 import Put from "../Put"
@@ -19,7 +19,7 @@ class Row extends React.Component {
 
 const Div = styled.div`
   display: grid;
-  grid-template-columns: 45% 10% 45%;
+  grid-template-columns: 43% 14% 43%;
   width: 100%;
 `;
 

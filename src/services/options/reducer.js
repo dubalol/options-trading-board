@@ -99,7 +99,12 @@ const options = (state = initialState, action) => {
     
     case types.UPDATE_CONTRACT:
       console.log('updating contract, ', action)
-      return state
+      newState = produce(state, draftState => {
+        draftState.contracts["22200418"].clock += 1;
+        // draftState.contracts["22200418"].bid += 1;
+        // draftState.contracts["22200418"].ask += 1;
+      })
+      return newState
 
     default:
       return state

@@ -1,15 +1,14 @@
 import React from "react";
 import moment from "moment";
 
-import Row from "./components/Row"
+import ColumnNames from "./components/ColumnNames"
 import Header from "./components/Header"
+import Row from "./components/Row"
 
 
 class Board extends React.Component {
   render() {
-
     const board = [];
-
     const { optionsMap } = this.props;
 
     if (optionsMap) {
@@ -24,12 +23,11 @@ class Board extends React.Component {
         })
       })
     }
-    /**
-     * 
-     */
+
     return(
       <div>
         Options Board
+        <ColumnNames />
         {board}
       </div>
     )

@@ -10,7 +10,7 @@ const mapStateToProps = (state) => ({
 
 class Options extends React.Component {
   render() {
-    console.log('rendered with props', this.props.optionsMap);
+    // console.log('rendered with props', this.props.optionsMap);
     const { optionsMap } = this.props;
     return(
       <div>
