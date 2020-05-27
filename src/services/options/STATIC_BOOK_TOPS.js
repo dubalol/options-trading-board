@@ -1,4 +1,4 @@
-{
+export const bookTops = {
   "data": [
     {
       "contract_id": 22201820,

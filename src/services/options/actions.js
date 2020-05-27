@@ -1,5 +1,5 @@
 import {
-  REQUEST_CONTRACTS, RECEIVE_CONTRACTS,
+  REQUEST_CONTRACTS, RECEIVE_CONTRACTS, MAP_OPTIONS,
   REQUEST_BOOK_TOPS, RECEIVE_BOOK_TOPS,
   WS_CONNECT, WS_CONNECTING, WS_CONNECTED, WS_DISCONNECT, WS_DISCONNECTED,
   UPDATE_CONTRACT
@@ -20,35 +20,32 @@ export const updateContract = data => ({ type: UPDATE_CONTRACT, payload: data})
 // Contract and Book Top actions
 const requestContracts = () => ({ type: REQUEST_CONTRACTS })
 
-const receiveContracts = (data) => ({
-  type: RECEIVE_CONTRACTS,
-  payload: data
-})
+const receiveContracts = (data) => ({ type: RECEIVE_CONTRACTS, payload: data })
+
+const mapOptions = () => ({ type: MAP_OPTIONS })
 
 const requestBookTops = () => ({ type: REQUEST_BOOK_TOPS })
 
-const receiveBookTops = (data) => ({
-  type: RECEIVE_BOOK_TOPS,
-  payload: data
-})
+const receiveBookTops = (data) => ({ type: RECEIVE_BOOK_TOPS, payload: data })
 
-const fetchInitialData = () => {
+const SetInitialData = () => {
   return async (dispatch) => {
     dispatch(requestContracts());
-    await getContracts().then(data => dispatch(receiveContracts(data)));
+    // await getContracts().then(data => dispatch(receiveContracts(data)));
+    dispatch(mapOptions());
     dispatch(requestBookTops());
-    await getBookTops().then(data => dispatch(receiveBookTops(data)));
+    // await getBookTops().then(data => dispatch(receiveBookTops(data)));
   }
 }
 
-const shouldFetchInitialData = (state) => {
-  return !state.isFetching
+const shouldSetInitialData = (state) => {
+  return !state.isFetching;
 }
 
-export const fetchInitialDataIfNeeded = () => {
+export const setInitialDataIfNeeded = () => {
   return (dispatch, getState) => {
-    if (shouldFetchInitialData(getState())) {
-      return dispatch(fetchInitialData());
+    if (shouldSetInitialData(getState())) {
+      return dispatch(SetInitialData());
     }
   }
 }

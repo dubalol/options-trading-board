@@ -1,4 +1,4 @@
-[
+export const contracts = [
   {
     "id": 21786162,
     "name": null,
