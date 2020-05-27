@@ -1,6 +1,6 @@
 import React from "react"
 import { connect } from "react-redux";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const mapStateToProps = (state, ownProps) => ({
   openInterest: state.contracts[ownProps.id].open_interest,
@@ -9,13 +9,45 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 class Call extends React.Component {
+  constructor() {
+    super()
+    this.state = { 
+      updating: false,
+      bidUpdating: false,
+      askUpdating: false
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { clock, bid, ask } = this.props;
+    
+    if (clock > prevProps.clock){
+      this.setState({
+        updating: true,
+        bidUpdating: bid !== prevProps.bid,
+        askUpdating: ask !== prevProps.ask
+      })
+  
+      setTimeout(() => {
+        this.setState({
+          updating: false,
+          bidUpdating: false,
+          askUpdating: false
+        })
+      }, 200)
+    }
+
+    return;
+  }
+
   render() {
+    const { updating, bidUpdating, askUpdating } = this.state;
     const { openInterest, bid, ask } = this.props;
     return (
-      <Div>
+      <Div updating={updating}>
         <Span>{openInterest}</Span>
-        <Span>{bid}</Span>
-        <Span>{ask}</Span>
+        <Span updating={bidUpdating}>{bid}</Span>
+        <Span updating={askUpdating}>{ask}</Span>
       </Div>
     )
   }
@@ -26,9 +58,14 @@ const Div = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   justify-items: center;
   transition: all .2s ease-in;
+  ${(props) => props.updating ? UpdatingDiv : 'background-color: inherit;'};
   &:hover {
     background-color: pink;
   }
+`;
+
+const UpdatingDiv = css`
+  background-color: pink;
 `;
 
 const Span = styled.span`
@@ -36,9 +73,14 @@ const Span = styled.span`
   text-align: right;
   width: 80%;
   transition: all .2s ease-in;
+  ${(props) => props.updating ? UpdatingSpan : 'background-color: inherit;'};
   &:hover {
     background-color: red;
   }
 `;
+
+const UpdatingSpan = css`
+  background-color: red;
+`
 
 export default connect(mapStateToProps)(Call);
