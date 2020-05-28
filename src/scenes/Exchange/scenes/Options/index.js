@@ -7,6 +7,8 @@ import OrderForm from "./components/OrderForm"
 import Graph from "./components/Graph"
 import OrderBook from "./components/OrderBook"
 
+import {updateBookTop} from "../../../../services/options/actions"
+
 const mapStateToProps = (state) => ({
   optionsMap: state.optionsMap,
   activeDayAhead: state.contracts[state.currentDayAheadId],
@@ -16,6 +18,7 @@ const mapStateToProps = (state) => ({
 class Options extends React.Component {
   render() {
     const { optionsMap, activeDayAhead, focusedContract } = this.props;
+    const { dispatch } = this.props
 
     let priceBTC;
     if (activeDayAhead) priceBTC = (activeDayAhead.bid + activeDayAhead.ask) / 2;
@@ -29,6 +32,7 @@ class Options extends React.Component {
         <OrderArea><OrderForm focus={focusedContract} /></OrderArea>
         <GraphArea><Graph focus={focusedContract} /></GraphArea>
         <BookArea><OrderBook focus={focusedContract} /></BookArea>
+        <button onClick={() => dispatch(updateBookTop())}>Update</button>
       </Div>
     )
   }

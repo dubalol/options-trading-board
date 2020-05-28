@@ -36,7 +36,7 @@ class Graph extends React.Component {
     const data = {
       name: "balance",
       columns: ["time", "bid", "ask", "mid"],
-      points: history
+      points: focus ? focus.history : []
     };
     
     const series = new TimeSeries(data);
@@ -47,8 +47,7 @@ class Graph extends React.Component {
   ]);
     return (
       <Div>
-        {!focus && `Select a contract`}
-        {focus && 
+        {!focus ? `Select a contract` :
         <>
           <ChartContainer
             timeRange={series.range()}

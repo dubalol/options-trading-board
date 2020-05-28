@@ -1,4 +1,5 @@
 import produce from "immer";
+import moment from "moment";
 
 import * as types from "./actionTypes";
 
@@ -40,7 +41,7 @@ const initialState = {
   "is_one_day": false 
 */
 const options = (state = initialState, action) => {
-  let newState;
+  let newState, now;
 
   switch (action.type) {
     case types.REQUEST_CONTRACTS:
@@ -49,7 +50,7 @@ const options = (state = initialState, action) => {
           const { id, label, strike_price, date_expires, derivative_type, open_interest, type } = ct;
           draftState.contracts[id] = {
             label,
-            strike_price,
+            strike_price: strike_price / 100,
             open_interest,
             date_expires,
             derivative_type,
@@ -70,7 +71,7 @@ const options = (state = initialState, action) => {
       //     const { id, label, strike_price, date_expires, derivative_type, open_interest, type } = ct;
       //     draftState.contracts[id] = {
       //       label,
-      //       strike_price,
+      //       strike_price: strike_price / 100,
       //       open_interest,
       //       date_expires,
       //       derivative_type,
@@ -96,13 +97,17 @@ const options = (state = initialState, action) => {
       return newState
       
     case types.REQUEST_BOOK_TOPS:
+      now = moment().unix() * 1000;
       newState = produce(state, draftState => {
         bookTops.data.forEach(bt => {
           const { contract_id, clock, ask, bid } = bt;
           if (draftState.contracts[contract_id]) {
             draftState.contracts[contract_id].clock = clock;
-            draftState.contracts[contract_id].ask = ask;
-            draftState.contracts[contract_id].bid = bid;
+            draftState.contracts[contract_id].ask = ask/100;
+            draftState.contracts[contract_id].bid = bid/100;
+            draftState.contracts[contract_id].history = [
+              [now, bid/100, ask/100, (bid + ask) / 2 / 100]
+            ]
           }
         })
       })
@@ -110,6 +115,7 @@ const options = (state = initialState, action) => {
 
     case types.RECEIVE_BOOK_TOPS:
       // const bookTops = action.payload;
+      // now = moment().unix() * 1000;
       // newState = produce(state, draftState => {
       //   bookTops.forEach(bt => {
       //     const { contract_id, clock, ask, bid } = bt;
@@ -117,6 +123,9 @@ const options = (state = initialState, action) => {
       //       draftState.contracts[contract_id].clock = clock;
       //       draftState.contracts[contract_id].ask = ask;
       //       draftState.contracts[contract_id].bid = bid;
+      //       draftState.contracts[contract_id].history = [
+      //         [now, bid/100, ask/100, (bid + ask) / 2 / 100]
+      //       ]
       //     }
       //   })
       // })
@@ -131,6 +140,12 @@ const options = (state = initialState, action) => {
       return state;
     
     case types.UPDATE_BOOK_TOP:
+      now = moment().unix() * 1000;
+      return produce(state, draftState => {
+        draftState.contracts[22199887].history.push([
+          now, (Math.random()*(1000)) + 2000, Math.random()*(1000) + 4000, Math.random()*(1000) + 3000
+        ])
+      })
       // console.log('updating contract with ', action.payload)
       const { contract_id, clock, ask, bid } = action.payload;
 
@@ -138,6 +153,9 @@ const options = (state = initialState, action) => {
         draftState.contracts[contract_id].clock = clock;
         draftState.contracts[contract_id].bid = bid;
         draftState.contracts[contract_id].ask = ask;
+        draftState.contracts[contract_id].history.push(
+          [now, bid, ask, (bid + ask) / 2]
+        )
       })
       return newState
 
