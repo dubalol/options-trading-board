@@ -2,8 +2,8 @@ import produce from "immer";
 
 import * as types from "./actionTypes";
 
-// import { contracts } from "./STATIC_CONTRACTS";
-// import { bookTops } from "./STATIC_BOOK_TOPS";
+import { contracts } from "./STATIC_CONTRACTS";
+import { bookTops } from "./STATIC_BOOK_TOPS";
 
 import  { mapOptions } from "./optionsMapper"
 
@@ -43,10 +43,6 @@ const options = (state = initialState, action) => {
 
   switch (action.type) {
     case types.REQUEST_CONTRACTS:
-      return state
-
-    case types.RECEIVE_CONTRACTS:
-      const contracts = action.payload;
       newState = produce(state, draftState => {
         contracts.filter(ct => ct.active).forEach(ct => {
           const { id, label, strike_price, date_expires, derivative_type, open_interest, type } = ct;
@@ -66,6 +62,26 @@ const options = (state = initialState, action) => {
       // console.log(mapOptions(newState.contracts));
       return newState
 
+    case types.RECEIVE_CONTRACTS:
+      // const contracts = action.payload;
+      // newState = produce(state, draftState => {
+      //   contracts.filter(ct => ct.active).forEach(ct => {
+      //     const { id, label, strike_price, date_expires, derivative_type, open_interest, type } = ct;
+      //     draftState.contracts[id] = {
+      //       label,
+      //       strike_price,
+      //       open_interest,
+      //       date_expires,
+      //       derivative_type,
+      //       type
+      //     }
+
+      //     // There should only be 1 day ahead swap active per day
+      //     if (derivative_type === 'day_ahead_swap') draftState.currentDayAheadId = id;
+      //   })
+      // });
+      // return newState
+
     case types.MAP_OPTIONS:
       newState = produce(state, draftState => {
         draftState.optionsMap = mapOptions(draftState.contracts, draftState.currentDayAheadId);
@@ -73,12 +89,8 @@ const options = (state = initialState, action) => {
       return newState;
 
     case types.REQUEST_BOOK_TOPS:
-      return state;
-
-    case types.RECEIVE_BOOK_TOPS:
-      const bookTops = action.payload;
       newState = produce(state, draftState => {
-        bookTops.forEach(bt => {
+        bookTops.data.forEach(bt => {
           const { contract_id, clock, ask, bid } = bt;
           if (draftState.contracts[contract_id]) {
             draftState.contracts[contract_id].clock = clock;
@@ -88,6 +100,20 @@ const options = (state = initialState, action) => {
         })
       })
       return newState;
+
+    case types.RECEIVE_BOOK_TOPS:
+      // const bookTops = action.payload;
+      // newState = produce(state, draftState => {
+      //   bookTops.forEach(bt => {
+      //     const { contract_id, clock, ask, bid } = bt;
+      //     if (draftState.contracts[contract_id]) {
+      //       draftState.contracts[contract_id].clock = clock;
+      //       draftState.contracts[contract_id].ask = ask;
+      //       draftState.contracts[contract_id].bid = bid;
+      //     }
+      //   })
+      // })
+      // return newState;
 
     case types.WS_CONNECTED:
       console.log('connected in reducer')

@@ -28,13 +28,13 @@ const requestBookTops = () => ({ type: REQUEST_BOOK_TOPS })
 
 const receiveBookTops = (data) => ({ type: RECEIVE_BOOK_TOPS, payload: data })
 
-const SetInitialData = () => {
+const setInitialData = () => {
   return async (dispatch) => {
     dispatch(requestContracts());
-    await getContracts().then(data => dispatch(receiveContracts(data)));
+    // await getContracts().then(data => dispatch(receiveContracts(data)));
     dispatch(mapOptions());
     dispatch(requestBookTops());
-    await getBookTops().then(data => dispatch(receiveBookTops(data)));
+    // await getBookTops().then(data => dispatch(receiveBookTops(data)));
   }
 }
 
@@ -45,29 +45,7 @@ const shouldSetInitialData = (state) => {
 export const setInitialDataIfNeeded = () => {
   return (dispatch, getState) => {
     if (shouldSetInitialData(getState())) {
-      return dispatch(SetInitialData());
+      return dispatch(setInitialData());
     }
   }
 }
-
-// Book top actions
-
-
-// const fetchBookTops = () => {
-//   return (dispatch) => {
-//     dispatch(requestBookTops())
-//     getBookTops().then(data => dispatch(receiveBookTops(data)))
-//   }
-// }
-
-// const shouldFetchBookTops = (state) => {
-//   return !state.isFetching
-// }
-
-// export const fetchBookTopsIfNeeded = () => {
-//   return (dispatch, getState) => {
-//     if (shouldFetchBookTops(getState())) {
-//       return dispatch(fetchBookTops());
-//     }
-//   }
-// }
