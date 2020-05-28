@@ -51,6 +51,7 @@ class Graph extends React.Component {
         <>
           <ChartContainer
             timeRange={series.range()}
+            hideTimeAxis={true}
             width={300}
             format={"%b-%d"}
             // minDuration={1000 * 60 * 60 * 24}
@@ -60,13 +61,15 @@ class Graph extends React.Component {
             <ChartRow 
               height="200">
                 <YAxis 
+                  hideAxisLine={true}
+                  showGrid={true}
                   id="axis1" 
                   label="$"
-                  min={0}
-                  max={1.1*series.max("ask")}
+                  min={0.8*series.min("bid")}
+                  max={1.25*series.max("ask")}
                   width="40"
                   type="linear"
-                  format=",.1f"/>
+                  format=",.0f"/>
                 <Charts>
                     <LineChart
                       axis="axis1"

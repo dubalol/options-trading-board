@@ -20,7 +20,7 @@ const socketMiddleware = () => {
 
     switch (msg.type) {
       case 'book_top':
-        store.dispatch(actions.updateBookTop(msg));
+        if (store.getState().isInitiallySet) store.dispatch(actions.updateBookTop(msg));
         break;
       default:
         break;

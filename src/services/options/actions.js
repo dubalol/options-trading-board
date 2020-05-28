@@ -33,10 +33,10 @@ const receiveBookTops = (data) => ({ type: RECEIVE_BOOK_TOPS, payload: data })
 const setInitialData = () => {
   return async (dispatch) => {
     dispatch(requestContracts());
-    // await getContracts().then(data => dispatch(receiveContracts(data)));
+    await getContracts().then(data => dispatch(receiveContracts(data)));
     dispatch(mapOptions());
     dispatch(requestBookTops());
-    // await getBookTops().then(data => dispatch(receiveBookTops(data)));
+    await getBookTops().then(data => dispatch(receiveBookTops(data)));
   }
 }
 

@@ -9,7 +9,7 @@ import { bookTops } from "./STATIC_BOOK_TOPS";
 import  { mapOptions } from "./optionsMapper"
 
 const initialState = {
-  isFetching: false,
+  isInitiallySet: false,
   isConnected: false,
   // updateQueue: [],
   currentDayAheadId: null,
@@ -45,27 +45,9 @@ const options = (state = initialState, action) => {
 
   switch (action.type) {
     case types.REQUEST_CONTRACTS:
-      newState = produce(state, draftState => {
-        contracts.filter(ct => ct.active).forEach(ct => {
-          const { id, label, strike_price, date_expires, derivative_type, open_interest, type } = ct;
-          draftState.contracts[id] = {
-            label,
-            strike_price: strike_price / 100,
-            open_interest,
-            date_expires,
-            derivative_type,
-            type
-          }
-
-          // There should only be 1 day ahead swap active per day
-          if (derivative_type === 'day_ahead_swap') draftState.currentDayAheadId = id;
-        })
-      });
-      // console.log(mapOptions(newState.contracts));
-      return newState
-
-    case types.RECEIVE_CONTRACTS:
-      // const contracts = action.payload;
+      // newState = produce(state, draftState => {
+      //   draftState.isFetching = true;
+      // })
       // newState = produce(state, draftState => {
       //   contracts.filter(ct => ct.active).forEach(ct => {
       //     const { id, label, strike_price, date_expires, derivative_type, open_interest, type } = ct;
@@ -82,7 +64,29 @@ const options = (state = initialState, action) => {
       //     if (derivative_type === 'day_ahead_swap') draftState.currentDayAheadId = id;
       //   })
       // });
+      // // console.log(mapOptions(newState.contracts));
       // return newState
+      return state;
+
+    case types.RECEIVE_CONTRACTS:
+      const contracts = action.payload;
+      newState = produce(state, draftState => {
+        contracts.filter(ct => ct.active).forEach(ct => {
+          const { id, label, strike_price, date_expires, derivative_type, open_interest, type } = ct;
+          draftState.contracts[id] = {
+            label,
+            strike_price: strike_price / 100,
+            open_interest,
+            date_expires,
+            derivative_type,
+            type
+          }
+
+          // There should only be 1 day ahead swap active per day
+          if (derivative_type === 'day_ahead_swap') draftState.currentDayAheadId = id;
+        })
+      });
+      return newState
 
     case types.MAP_OPTIONS:
       newState = produce(state, draftState => {
@@ -97,9 +101,29 @@ const options = (state = initialState, action) => {
       return newState
       
     case types.REQUEST_BOOK_TOPS:
+      // now = moment().unix() * 1000;
+      // newState = produce(state, draftState => {
+      //   bookTops.data.forEach(bt => {
+      //     const { contract_id, clock, ask, bid } = bt;
+      //     if (draftState.contracts[contract_id]) {
+      //       draftState.contracts[contract_id].clock = clock;
+      //       draftState.contracts[contract_id].ask = ask/100;
+      //       draftState.contracts[contract_id].bid = bid/100;
+      //       draftState.contracts[contract_id].history = [
+      //         [now, bid/100, ask/100, (bid + ask) / 2 / 100]
+      //       ]
+      //     }
+      //   })
+      // })
+      // return newState;
+      return state;
+
+    case types.RECEIVE_BOOK_TOPS:
+      const bookTops = action.payload;
       now = moment().unix() * 1000;
       newState = produce(state, draftState => {
-        bookTops.data.forEach(bt => {
+        draftState.isInitiallySet = true;
+        bookTops.forEach(bt => {
           const { contract_id, clock, ask, bid } = bt;
           if (draftState.contracts[contract_id]) {
             draftState.contracts[contract_id].clock = clock;
@@ -113,24 +137,6 @@ const options = (state = initialState, action) => {
       })
       return newState;
 
-    case types.RECEIVE_BOOK_TOPS:
-      // const bookTops = action.payload;
-      // now = moment().unix() * 1000;
-      // newState = produce(state, draftState => {
-      //   bookTops.forEach(bt => {
-      //     const { contract_id, clock, ask, bid } = bt;
-      //     if (draftState.contracts[contract_id]) {
-      //       draftState.contracts[contract_id].clock = clock;
-      //       draftState.contracts[contract_id].ask = ask;
-      //       draftState.contracts[contract_id].bid = bid;
-      //       draftState.contracts[contract_id].history = [
-      //         [now, bid/100, ask/100, (bid + ask) / 2 / 100]
-      //       ]
-      //     }
-      //   })
-      // })
-      // return newState;
-
     case types.WS_CONNECTED:
       console.log('connected in reducer')
       return state;
@@ -141,20 +147,20 @@ const options = (state = initialState, action) => {
     
     case types.UPDATE_BOOK_TOP:
       now = moment().unix() * 1000;
-      return produce(state, draftState => {
-        draftState.contracts[22199887].history.push([
-          now, (Math.random()*(1000)) + 2000, Math.random()*(1000) + 4000, Math.random()*(1000) + 3000
-        ])
-      })
+      // return produce(state, draftState => {
+      //   draftState.contracts[22199887].history.push([
+      //     now, (Math.random()*(1000)) + 2000, Math.random()*(1000) + 4000, Math.random()*(1000) + 3000
+      //   ])
+      // })
       // console.log('updating contract with ', action.payload)
       const { contract_id, clock, ask, bid } = action.payload;
 
       newState = produce(state, draftState => {
         draftState.contracts[contract_id].clock = clock;
-        draftState.contracts[contract_id].bid = bid;
-        draftState.contracts[contract_id].ask = ask;
+        draftState.contracts[contract_id].bid = bid/100;
+        draftState.contracts[contract_id].ask = ask/100;
         draftState.contracts[contract_id].history.push(
-          [now, bid, ask, (bid + ask) / 2]
+          [now, bid/100, ask/100, (bid + ask) / 2 / 100]
         )
       })
       return newState
