@@ -2,8 +2,8 @@ import produce from "immer";
 
 import * as types from "./actionTypes";
 
-import { contracts } from "./STATIC_CONTRACTS";
-import { bookTops } from "./STATIC_BOOK_TOPS";
+// import { contracts } from "./STATIC_CONTRACTS";
+// import { bookTops } from "./STATIC_BOOK_TOPS";
 
 import  { mapOptions } from "./optionsMapper"
 
@@ -43,6 +43,10 @@ const options = (state = initialState, action) => {
 
   switch (action.type) {
     case types.REQUEST_CONTRACTS:
+      return state
+
+    case types.RECEIVE_CONTRACTS:
+      const contracts = action.payload;
       newState = produce(state, draftState => {
         contracts.filter(ct => ct.active).forEach(ct => {
           const { id, label, strike_price, date_expires, derivative_type, open_interest, type } = ct;
@@ -60,12 +64,7 @@ const options = (state = initialState, action) => {
         })
       });
       // console.log(mapOptions(newState.contracts));
-
       return newState
-
-    case types.RECEIVE_CONTRACTS:
-      console.log(action.payload);
-      return state
 
     case types.MAP_OPTIONS:
       newState = produce(state, draftState => {
@@ -74,8 +73,12 @@ const options = (state = initialState, action) => {
       return newState;
 
     case types.REQUEST_BOOK_TOPS:
+      return state;
+
+    case types.RECEIVE_BOOK_TOPS:
+      const bookTops = action.payload;
       newState = produce(state, draftState => {
-        bookTops.data.forEach(bt => {
+        bookTops.forEach(bt => {
           const { contract_id, clock, ask, bid } = bt;
           if (draftState.contracts[contract_id]) {
             draftState.contracts[contract_id].clock = clock;
@@ -86,9 +89,6 @@ const options = (state = initialState, action) => {
       })
       return newState;
 
-    case types.RECEIVE_BOOK_TOPS:
-      return state
-
     case types.WS_CONNECTED:
       console.log('connected in reducer')
       return state;
@@ -97,12 +97,14 @@ const options = (state = initialState, action) => {
       console.log('disconnected in reducer')
       return state;
     
-    case types.UPDATE_CONTRACT:
-      console.log('updating contract, ', action)
+    case types.UPDATE_BOOK_TOP:
+      // console.log('updating contract with ', action.payload)
+      const { contract_id, clock, ask, bid } = action.payload;
+
       newState = produce(state, draftState => {
-        draftState.contracts["22200418"].clock += 1;
-        // draftState.contracts["22200418"].bid += 1;
-        // draftState.contracts["22200418"].ask += 1;
+        draftState.contracts[contract_id].clock = clock;
+        draftState.contracts[contract_id].bid = bid;
+        draftState.contracts[contract_id].ask = ask;
       })
       return newState
 

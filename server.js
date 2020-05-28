@@ -5,7 +5,7 @@ const sock = new WebSocket('wss://trade.ledgerx.com/api/ws');
 setTimeout(() => {
   console.log('closing websocket');
   sock.close();
-}, 20000);
+}, 60000);
 
 
 const express = require('express');

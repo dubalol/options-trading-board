@@ -1,6 +1,5 @@
 import React from "react"
 import { connect } from "react-redux";
-// import styled from "@emotion/styled";
 import styled, { css } from "styled-components";
 
 const mapStateToProps = (state, ownProps) => ({
@@ -43,7 +42,6 @@ class Put extends React.Component {
   }
 
   render() {
-    console.log('rendered a put contract')
     const { updating, bidUpdating, askUpdating } = this.state;
     const { openInterest, bid, ask } = this.props;
     return (

@@ -2,12 +2,10 @@ import {
   REQUEST_CONTRACTS, RECEIVE_CONTRACTS, MAP_OPTIONS,
   REQUEST_BOOK_TOPS, RECEIVE_BOOK_TOPS,
   WS_CONNECT, WS_CONNECTING, WS_CONNECTED, WS_DISCONNECT, WS_DISCONNECTED,
-  UPDATE_CONTRACT
+  UPDATE_BOOK_TOP
 } from './actionTypes'
 
 import { getContracts, getBookTops } from "./api";
-
-export const update = () => ({ type: UPDATE_CONTRACT })
 
 // WebSocket actions
 export const wsConnect = host => ({ type: WS_CONNECT, host })
@@ -16,7 +14,7 @@ export const wsConnected = host => ({ type: WS_CONNECTED, host })
 export const wsDisconnect = host => ({ type: WS_DISCONNECT, host })
 export const wsDisconnected = host => ({ type: WS_DISCONNECTED, host })
 
-export const updateContract = data => ({ type: UPDATE_CONTRACT, payload: data})
+export const updateBookTop = data => ({ type: UPDATE_BOOK_TOP, payload: data})
 
 
 // Contract and Book Top actions
@@ -33,10 +31,10 @@ const receiveBookTops = (data) => ({ type: RECEIVE_BOOK_TOPS, payload: data })
 const SetInitialData = () => {
   return async (dispatch) => {
     dispatch(requestContracts());
-    // await getContracts().then(data => dispatch(receiveContracts(data)));
+    await getContracts().then(data => dispatch(receiveContracts(data)));
     dispatch(mapOptions());
     dispatch(requestBookTops());
-    // await getBookTops().then(data => dispatch(receiveBookTops(data)));
+    await getBookTops().then(data => dispatch(receiveBookTops(data)));
   }
 }
 

@@ -15,11 +15,12 @@ const socketMiddleware = () => {
 
   const onMessage = store => (event) => {
     const payload = JSON.parse(event.data);
-    console.log('event data: ', payload);
+    // console.log('event data: ', payload);
+    const msg = JSON.parse(payload.data);
 
-    switch (payload.type) {
-      case 'message':
-        store.dispatch(actions.updateContract(payload.data));
+    switch (msg.type) {
+      case 'book_top':
+        store.dispatch(actions.updateBookTop(msg));
         break;
       default:
         break;
@@ -36,7 +37,6 @@ const socketMiddleware = () => {
         }
 
         // connect to the remote host
-        const proxyURL = 'https://cors-anywhere.herokuapp.com';
         socket = new WebSocket(`${action.host}`);
 
         // websocket handlers
@@ -57,7 +57,7 @@ const socketMiddleware = () => {
         // Or chat room messages if socket middleware was repurposed
         break;
       default:
-        console.log('the next action:', action);
+        // console.log('the next action:', action);
         return next(action);
     }
   };

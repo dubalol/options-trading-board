@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import styled, { css } from "styled-components";
 
 const mapStateToProps = (state, ownProps) => ({
+  clock: state.contracts[ownProps.id].clock,
   openInterest: state.contracts[ownProps.id].open_interest,
   bid: state.contracts[ownProps.id].bid,
   ask: state.contracts[ownProps.id].ask,
