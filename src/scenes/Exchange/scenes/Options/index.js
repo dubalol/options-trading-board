@@ -5,16 +5,20 @@ import Board from "./components/Board"
 
 const mapStateToProps = (state) => ({
   optionsMap: state.optionsMap,
-  currentDayAheadId: state.currentDayAheadId
+  activeDayAhead: state.contracts[state.currentDayAheadId]
 })
 
 class Options extends React.Component {
   render() {
-    // console.log('rendered with props', this.props.optionsMap);
-    const { optionsMap } = this.props;
+    const { optionsMap, activeDayAhead } = this.props;
+
+    let priceBTC;
+    if (activeDayAhead) priceBTC = (activeDayAhead.bid + activeDayAhead.ask) / 2;
+
     return(
       <div>
-        <Board optionsMap={optionsMap}/>
+        {priceBTC}
+        <Board optionsMap={optionsMap} priceBTC={priceBTC}/>
       </div>
     )
   }

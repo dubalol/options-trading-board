@@ -1,15 +1,17 @@
 import React from "react";
 import moment from "moment";
+import styled, { css } from "styled-components";
 
 import ColumnNames from "./components/ColumnNames"
 import Header from "./components/Header"
 import Row from "./components/Row"
+import PriceBreak from "./components/PriceBreak"
 
 
 class Board extends React.Component {
   render() {
     const board = [];
-    const { optionsMap } = this.props;
+    const { optionsMap, priceBTC } = this.props;
 
     if (optionsMap) {
       const sortedExpiryDates = Object.keys(optionsMap).sort();
@@ -17,14 +19,22 @@ class Board extends React.Component {
       sortedExpiryDates.forEach(date => {
         board.push(<Header date={date} key={date}/>)
   
-        const sortedStrikes = Object.keys(optionsMap[date]);
-        sortedStrikes.forEach(strike => {
-          board.push(<Row strike={strike} contracts={optionsMap[date][strike]} key={date+strike}/>)
+        const sortedStrikes = Object.keys(optionsMap[date]).map(el => Number(el)).sort((a, b) => a - b);
+
+        sortedStrikes.forEach((strike, index) => {
+          const isPriceBreak = (strike <= priceBTC && sortedStrikes[index + 1] >= priceBTC);
+          const breakOffset = 0;
+
+          const row = <Row 
+            strike={strike} contracts={optionsMap[date][strike]} key={date+strike}
+            isPriceBreak={isPriceBreak} breakOffset={breakOffset}
+          />
+          board.push(row)
         })
       })
     }
 
-    return(
+    return (
       <div>
         Options Board
         <ColumnNames />
@@ -33,5 +43,6 @@ class Board extends React.Component {
     )
   }
 }
+
 
 export default Board;

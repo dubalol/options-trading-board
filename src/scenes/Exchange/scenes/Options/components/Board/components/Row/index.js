@@ -3,14 +3,15 @@ import styled from "styled-components";
 
 import Call from "../Call"
 import Put from "../Put"
+import StrikeSpan from "../StrikeSpan"
 
 class Row extends React.Component {
   render() {
-    const { contracts, strike } = this.props;
+    const { contracts, strike, isPriceBreak, breakOffset } = this.props;
     return (
       <Div>
         <Call id={contracts.call} />
-        <Span>{strike}</Span>
+        <StrikeSpan isPriceBreak={isPriceBreak} breakOffset={breakOffset} strike={strike}/>
         <Put id={contracts.put} />
       </Div>
     )
