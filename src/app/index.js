@@ -26,7 +26,6 @@ class App extends React.Component {
     const { dispatch } = this.props;
     return(
       <div>
-        Hello World
         {/* <button onClick={() => dispatch(update())}>Updater</button> */}
         <Exchange />
       </div>

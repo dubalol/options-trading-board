@@ -1,12 +1,9 @@
 import React from "react";
 import moment from "moment";
-import styled, { css } from "styled-components";
 
 import ColumnNames from "./components/ColumnNames"
 import Header from "./components/Header"
 import Row from "./components/Row"
-import PriceBreak from "./components/PriceBreak"
-
 
 class Board extends React.Component {
   render() {
@@ -36,13 +33,11 @@ class Board extends React.Component {
 
     return (
       <div>
-        Options Board
-        <ColumnNames />
-        {board}
+          <ColumnNames />
+          {board}
       </div>
     )
   }
 }
-
 
 export default Board;
