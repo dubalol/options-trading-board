@@ -1,6 +1,7 @@
 import React from "react"
 import { connect } from "react-redux";
 import styled, { css } from "styled-components";
+import { focusContract } from "../../../../../../../../services/options/actions"
 
 const mapStateToProps = (state, ownProps) => ({
   clock: state.contracts[ownProps.id].clock,
@@ -17,6 +18,7 @@ class Call extends React.Component {
       bidUpdating: false,
       askUpdating: false
     }
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -41,11 +43,17 @@ class Call extends React.Component {
     return;
   }
 
+  handleClick(e) {
+    e.preventDefault();
+    const { dispatch } = this.props;
+    dispatch(focusContract(this.props.id))
+  }
+
   render() {
     const { updating, bidUpdating, askUpdating } = this.state;
     const { openInterest, bid, ask } = this.props;
     return (
-      <Div updating={updating}>
+      <Div onClick={this.handleClick} updating={updating}>
         <Span>{openInterest}</Span>
         <Span updating={bidUpdating}>{bid}</Span>
         <Span updating={askUpdating}>{ask}</Span>

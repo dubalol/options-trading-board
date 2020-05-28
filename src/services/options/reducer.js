@@ -12,6 +12,7 @@ const initialState = {
   isConnected: false,
   // updateQueue: [],
   currentDayAheadId: null,
+  focusedContract: null,
   contracts: {
     // Index on contract_id to facilitate updates
     // Handle selector logic in component services
@@ -88,6 +89,12 @@ const options = (state = initialState, action) => {
       })
       return newState;
 
+    case types.FOCUS_CONTRACT:
+      newState = produce(state, draftState => {
+        draftState.focusedContract = action.payload
+      })
+      return newState
+      
     case types.REQUEST_BOOK_TOPS:
       newState = produce(state, draftState => {
         bookTops.data.forEach(bt => {

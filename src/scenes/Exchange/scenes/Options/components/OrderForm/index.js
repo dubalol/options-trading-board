@@ -2,9 +2,11 @@ import React from "react"
 import styled from "styled-components"
 class OrderForm extends React.Component {
   render() {
+    const { focus } = this.props;
     return (
       <Div>
-        Form
+        {!focus && `Select a contract`}
+        {focus && `Form for ${this.props.focus.label}`}
       </Div>
     )
   }

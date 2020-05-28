@@ -1,5 +1,5 @@
 import {
-  REQUEST_CONTRACTS, RECEIVE_CONTRACTS, MAP_OPTIONS,
+  REQUEST_CONTRACTS, RECEIVE_CONTRACTS, MAP_OPTIONS, FOCUS_CONTRACT,
   REQUEST_BOOK_TOPS, RECEIVE_BOOK_TOPS,
   WS_CONNECT, WS_CONNECTING, WS_CONNECTED, WS_DISCONNECT, WS_DISCONNECTED,
   UPDATE_BOOK_TOP
@@ -23,6 +23,8 @@ const requestContracts = () => ({ type: REQUEST_CONTRACTS })
 const receiveContracts = (data) => ({ type: RECEIVE_CONTRACTS, payload: data })
 
 const mapOptions = () => ({ type: MAP_OPTIONS })
+
+export const focusContract = (data) => ({ type: FOCUS_CONTRACT, payload: data })
 
 const requestBookTops = () => ({ type: REQUEST_BOOK_TOPS })
 

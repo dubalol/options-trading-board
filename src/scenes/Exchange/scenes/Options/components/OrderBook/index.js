@@ -3,9 +3,11 @@ import styled from "styled-components"
 
 class OrderBook extends React.Component {
   render() {
+    const { focus } = this.props;
     return (
       <Div>
-        Book
+        {!focus && `Select a contract`}
+        {focus && `Order book for ${this.props.focus.label}`}
       </Div>
     )
   }

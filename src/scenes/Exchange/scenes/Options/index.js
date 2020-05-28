@@ -9,12 +9,13 @@ import OrderBook from "./components/OrderBook"
 
 const mapStateToProps = (state) => ({
   optionsMap: state.optionsMap,
-  activeDayAhead: state.contracts[state.currentDayAheadId]
+  activeDayAhead: state.contracts[state.currentDayAheadId],
+  focusedContract: state.contracts[state.focusedContract]
 })
 
 class Options extends React.Component {
   render() {
-    const { optionsMap, activeDayAhead } = this.props;
+    const { optionsMap, activeDayAhead, focusedContract } = this.props;
 
     let priceBTC;
     if (activeDayAhead) priceBTC = (activeDayAhead.bid + activeDayAhead.ask) / 2;
@@ -23,11 +24,11 @@ class Options extends React.Component {
       <Div>
         {priceBTC}
         <BoardArea>
-          <Board optionsMap={optionsMap} priceBTC={priceBTC}/>
+          <Board optionsMap={optionsMap} priceBTC={priceBTC} />
         </BoardArea>
-        <OrderArea><OrderForm /></OrderArea>
-        <GraphArea><Graph /></GraphArea>
-        <BookArea><OrderBook /></BookArea>
+        <OrderArea><OrderForm focus={focusedContract} /></OrderArea>
+        <GraphArea><Graph focus={focusedContract} /></GraphArea>
+        <BookArea><OrderBook focus={focusedContract} /></BookArea>
       </Div>
     )
   }
