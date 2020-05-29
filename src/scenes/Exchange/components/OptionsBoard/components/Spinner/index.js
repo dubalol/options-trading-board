@@ -12,7 +12,7 @@ const override = css`
 class Spinner extends React.Component {
   render() {
     return (
-      <div className="sweet-loading">
+      <div data-testid="spinner" className="sweet-loading">
         <GridLoader
           css={override}
           size={150}

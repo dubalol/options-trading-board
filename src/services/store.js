@@ -4,7 +4,7 @@ import wsMiddleware from "./options/wsMiddleware";
 // Comment for production
 // import { createLogger } from "redux-logger";
 
-import options from "./options/reducer";
+import { options } from "./options/reducer";
 
 // const loggerMiddleware = createLogger();
 

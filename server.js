@@ -30,10 +30,14 @@ app.get('/api/book-tops', (req, res) => {
 
 const sock = new WebSocket('wss://trade.ledgerx.com/api/ws');
 
+sock.onmessage = (msg) => {
+  console.log('received msg: ', msg);
+}
+
 setTimeout(() => {
   console.log('closing websocket');
   sock.close();
-}, 60000);
+}, 600000);
 
 const wss = new WebSocket.Server({ server });
 

@@ -8,7 +8,7 @@ import { bookTops } from "./STATIC_BOOK_TOPS";
 
 import  { mapOptions } from "./optionsMapper"
 
-const initialState = {
+export const initialState = {
   networkErorr: false,
   isInitiallySet: false,
   isConnected: false,
@@ -20,7 +20,7 @@ const initialState = {
   optionsMap: null
 }
 
-const options = (state = initialState, action) => {
+export const options = (state = initialState, action) => {
   let newState, now;
 
   switch (action.type) {
@@ -171,5 +171,3 @@ const options = (state = initialState, action) => {
       return state
   }
 }
-
-export default options;
