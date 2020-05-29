@@ -1,6 +1,7 @@
 import {
   REQUEST_CONTRACTS, RECEIVE_CONTRACTS, MAP_OPTIONS, FOCUS_CONTRACT,
   REQUEST_BOOK_TOPS, RECEIVE_BOOK_TOPS,
+  NETWORK_ERROR,
   WS_CONNECT, WS_CONNECTING, WS_CONNECTED, WS_DISCONNECT, WS_DISCONNECTED,
   UPDATE_BOOK_TOP
 } from './actionTypes'
@@ -30,13 +31,19 @@ const requestBookTops = () => ({ type: REQUEST_BOOK_TOPS })
 
 const receiveBookTops = (data) => ({ type: RECEIVE_BOOK_TOPS, payload: data })
 
+const networkError = () => ({ type: NETWORK_ERROR })
+
 const setInitialData = () => {
   return async (dispatch) => {
     dispatch(requestContracts());
-    await getContracts().then(data => dispatch(receiveContracts(data)));
+    await getContracts()
+      .then(data => dispatch(receiveContracts(data)))
+      .catch(() => dispatch(networkError()))
     dispatch(mapOptions());
     dispatch(requestBookTops());
-    await getBookTops().then(data => dispatch(receiveBookTops(data)));
+    await getBookTops()
+      .then(data => dispatch(receiveBookTops(data)))
+      .catch(() => dispatch(networkError()))
   }
 }
 

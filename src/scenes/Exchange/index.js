@@ -18,6 +18,7 @@ import themes from "../../services/theme"
 const mapStateToProps = (state) => ({
   focusedContract: state.contracts[state.focusedContract],
   activeDayAhead: state.contracts[state.currentDayAheadId],
+  networkError: state.networkError
 })
 
 class Exchange extends React.Component {
@@ -39,13 +40,13 @@ class Exchange extends React.Component {
 
   render() {
     const { focus, theme } = this.state;
-    const { focusedContract, activeDayAhead } = this.props;
+    const { focusedContract, activeDayAhead, networkError } = this.props;
 
     let priceBTC = 0;
     if (activeDayAhead) priceBTC = (activeDayAhead.ask + activeDayAhead.bid) / 2
     // const { ask, bid } = activeDayAhead;
 
-
+    if (networkError) return(<div>Unexpected network error</div>)
     return(
       <ThemeProvider theme={themes[theme]}>
         <PortfolioBar activeDayAhead={activeDayAhead} handleThemeChange={() => this.handleThemeChange()}/>

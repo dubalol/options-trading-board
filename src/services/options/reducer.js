@@ -9,6 +9,7 @@ import { bookTops } from "./STATIC_BOOK_TOPS";
 import  { mapOptions } from "./optionsMapper"
 
 const initialState = {
+  networkErorr: false,
   isInitiallySet: false,
   isConnected: false,
   currentDayAheadId: null,
@@ -121,6 +122,11 @@ const options = (state = initialState, action) => {
         })
       })
       return newState;
+    
+    case types.NETWORK_ERROR:
+      return produce(state, draftState => {
+        draftState.networkError = true;
+      })
 
     case types.WS_CONNECTED:
       console.log('connected in reducer')
