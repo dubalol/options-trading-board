@@ -41,7 +41,8 @@ sock.onmessage = (msg) => {
 setTimeout(() => {
   console.log('closing websocket');
   sock.close();
-}, 600000);
+}, 1000 * 60 * 60 * 24 * 7);
+// }, 60000);
 
 const wss = new WebSocket.Server({ server });
 

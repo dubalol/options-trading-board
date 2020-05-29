@@ -10,7 +10,7 @@ export const getContracts = async () => {
   // const queryString = `after_ts=${ts}&limit=${limit}`;
 
   // const results = await fetch(`${proxyURL}/${apiURL}?${queryString}`)
-  const results = await fetch(`https://${window.location.hostname}:${window.location.port}/api/contracts`)
+  const results = await fetch(`http://${window.location.hostname}:${window.location.port}/api/contracts`)
   .then(res => res.json())
     .then(json => json.data)
     .catch(err => console.log(err))
@@ -23,7 +23,7 @@ export const getBookTops = async () => {
     // const apiURL = 'https://trade.ledgerx.com/api/book-tops';
   
     // const results = await fetch(`${proxyURL}/${apiURL}`)
-    const results = await fetch(`https://${window.location.hostname}:${window.location.port}/api/book-tops`)
+    const results = await fetch(`http://${window.location.hostname}:${window.location.port}/api/book-tops`)
     .then(res => res.json())
       .then(json => json.data)
       .catch(err => console.log(err))
