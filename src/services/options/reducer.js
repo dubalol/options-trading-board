@@ -11,43 +11,19 @@ import  { mapOptions } from "./optionsMapper"
 const initialState = {
   isInitiallySet: false,
   isConnected: false,
-  // updateQueue: [],
   currentDayAheadId: null,
   focusedContract: null,
   contracts: {
     // Index on contract_id to facilitate updates
-    // Handle selector logic in component services
   },
   optionsMap: null
 }
 
-
-/*
-  Sample Contract
-  "id": 21786162,
-  "name": null,
-  "label": "cBTC 2021-06-25 Put $50,000.00",
-  "underlying_asset": "CBTC",
-  "collateral_asset": "USD",
-  "active": true,
-  "type": "put",
-  "strike_price": 5000000,
-  "min_increment": 1,
-  "date_live": "2019-11-19 05:00:00+0000",
-  "date_expires": "2021-06-25 20:00:00+0000",
-  "date_exercise": "2021-06-25 21:00:00+0000",
-  "derivative_type": "options_contract",
-  "open_interest": 100,
-  "is_one_day": false 
-*/
 const options = (state = initialState, action) => {
   let newState, now;
 
   switch (action.type) {
     case types.REQUEST_CONTRACTS:
-      // newState = produce(state, draftState => {
-      //   draftState.isFetching = true;
-      // })
       // newState = produce(state, draftState => {
       //   contracts.filter(ct => ct.active).forEach(ct => {
       //     const { id, label, strike_price, date_expires, derivative_type, open_interest, type } = ct;
@@ -64,7 +40,6 @@ const options = (state = initialState, action) => {
       //     if (derivative_type === 'day_ahead_swap') draftState.currentDayAheadId = id;
       //   })
       // });
-      // // console.log(mapOptions(newState.contracts));
       // return newState
       return state;
 
@@ -122,16 +97,26 @@ const options = (state = initialState, action) => {
       const bookTops = action.payload;
       now = moment().unix() * 1000;
       newState = produce(state, draftState => {
+        // ! Websocket messages will not update state until this next line
         draftState.isInitiallySet = true;
+
+        const priceBTC = (draftState.contracts[draftState.currentDayAheadId].bid
+          + draftState.contracts[draftState.currentDayAheadId].ask) / 2;
+
         bookTops.forEach(bt => {
           const { contract_id, clock, ask, bid } = bt;
+          const mid = (ask + bid) / 2;
           if (draftState.contracts[contract_id]) {
             draftState.contracts[contract_id].clock = clock;
             draftState.contracts[contract_id].ask = ask/100;
             draftState.contracts[contract_id].bid = bid/100;
-            draftState.contracts[contract_id].history = [
-              [now, bid/100, ask/100, (bid + ask) / 2 / 100]
-            ]
+            draftState.contracts[contract_id].history = [[
+              now,
+              bid/100, 
+              ask/100, 
+              mid/100,
+              Math.abs(priceBTC - draftState.contracts[contract_id].strike_price)
+            ]]
           }
         })
       })
@@ -148,20 +133,31 @@ const options = (state = initialState, action) => {
     case types.UPDATE_BOOK_TOP:
       now = moment().unix() * 1000;
       // return produce(state, draftState => {
-      //   draftState.contracts[22199887].history.push([
+      //   draftState.contracts[22199888].clock += 1;
+      //   draftState.contracts[22199888].bid += 1;
+      //   draftState.contracts[22199888].ask += 1;
+      //   draftState.contracts[22199888].history.push([
       //     now, (Math.random()*(1000)) + 2000, Math.random()*(1000) + 4000, Math.random()*(1000) + 3000
       //   ])
       // })
-      // console.log('updating contract with ', action.payload)
       const { contract_id, clock, ask, bid } = action.payload;
-
+      const mid = (ask + bid) / 2;
+      
       newState = produce(state, draftState => {
-        draftState.contracts[contract_id].clock = clock;
-        draftState.contracts[contract_id].bid = bid/100;
-        draftState.contracts[contract_id].ask = ask/100;
-        draftState.contracts[contract_id].history.push(
-          [now, bid/100, ask/100, (bid + ask) / 2 / 100]
-        )
+        const priceBTC = (draftState.contracts[draftState.currentDayAheadId].bid
+          + draftState.contracts[draftState.currentDayAheadId].ask) / 2;
+        if (clock > draftState.contracts[contract_id].clock) {
+          draftState.contracts[contract_id].clock = clock;
+          draftState.contracts[contract_id].bid = bid/100;
+          draftState.contracts[contract_id].ask = ask/100;
+          draftState.contracts[contract_id].history.push([
+              now,
+              bid/100,
+              ask/100,
+              mid/100,
+              Math.abs(priceBTC - draftState.contracts[contract_id].strike_price)
+          ])
+        }
       })
       return newState
 

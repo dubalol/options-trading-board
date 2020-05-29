@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux";
 import styled, { css } from "styled-components";
-import { focusContract } from "../../../../../../../../services/options/actions"
+import { focusContract } from "../../../../../../services/options/actions"
 
 const mapStateToProps = (state, ownProps) => ({
   clock: state.contracts[ownProps.id].clock,
@@ -27,8 +27,8 @@ class Put extends React.Component {
     if (clock > prevProps.clock){
       this.setState({
         updating: true,
-        bidUpdating: bid !== prevProps.bid,
-        askUpdating: ask !== prevProps.ask
+        bidUpdating: bid > prevProps.bid ? 'bad' : bid < prevProps.bid ? 'good' : false,
+        askUpdating: ask > prevProps.ask ? 'bad' : ask < prevProps.ask ? 'good' : false
       })
   
       setTimeout(() => {
@@ -51,12 +51,20 @@ class Put extends React.Component {
 
   render() {
     const { updating, bidUpdating, askUpdating } = this.state;
-    const { openInterest, bid, ask } = this.props;
+    const { openInterest, bid, ask, isEven } = this.props;
+
+    const oi = Number.parseInt(openInterest)
+    let oiDisplay = oi >= 1000 ? (oi / 1000).toFixed(1).toLocaleString() + 'K' : oi;
+    if (isNaN(oi)) oiDisplay = '-';
+
+    let bidDisplay = bid === 0 ? '-' : Number(bid).toFixed(2).toLocaleString()
+    let askDisplay = ask === 0 ? '-' : Number(ask).toFixed(2).toLocaleString()
+
     return (
-      <Div onClick={this.handleClick} updating={updating}>
-        <Span updating={bidUpdating}>{bid}</Span>
-        <Span updating={askUpdating}>{ask}</Span>
-        <Span>{openInterest}</Span>
+      <Div isEven={isEven} onClick={this.handleClick} updating={updating}>
+        <Span updating={bidUpdating}>{bidDisplay}</Span>
+        <Span updating={askUpdating}>{askDisplay}</Span>
+        <Span>{oiDisplay}</Span>
       </Div>
     )
   }
@@ -67,29 +75,31 @@ const Div = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   justify-items: center;
   transition: all .2s ease-in;
-  ${(props) => props.updating ? UpdatingDiv : 'background-color: inherit;'};
+  background-color: ${props => {
+    return props.isEven ? props.theme.bgMain : props.theme.bgEveryOtherContract
+  }};
   &:hover {
-    background-color: pink;
+    transition: none;
+    background-color: ${props => props.theme.bgFocusContract};
   }
-`;
-
-const UpdatingDiv = css`
-  background-color: pink;
 `;
 
 const Span = styled.span`
-  border: 1px solid black;
+  padding: 0.5em 1em 0.5em 0em;
   text-align: right;
   width: 80%;
   transition: all .2s ease-in;
-  ${(props) => props.updating ? UpdatingSpan : 'background-color: inherit;'};
+  color: ${props => {
+    if (props.updating === 'good') return props.theme.textBetterPrice
+    if (props.updating === 'bad') return props.theme.textWorsePrice
+  }};
+  background-color: ${props => {
+    if (props.updating === 'good') return props.theme.bgBetterPrice
+    if (props.updating === 'bad') return props.theme.bgWorsePrice
+  }};
   &:hover {
-    background-color: red;
+    background-color: ${props => props.theme.bgFocusPrice};
   }
 `;
-
-const UpdatingSpan = css`
-  background-color: red;
-`
 
 export default connect(mapStateToProps)(Put);

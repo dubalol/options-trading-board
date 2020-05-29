@@ -35,19 +35,32 @@ class Graph extends React.Component {
 
     const data = {
       name: "balance",
-      columns: ["time", "bid", "ask", "mid"],
+      columns: ["time", "bid", "ask", "mid", "brk"],
       points: focus ? focus.history : []
     };
     
     const series = new TimeSeries(data);
-    const upDownStyle = styler([
-      { key: "bid", color: "red" }, 
-      { key: "ask", color: "blue" },
-      { key: "mid", color: "green" }
-  ]);
+
+    const keyStyle = styler([
+      { key: "bid", color: "green", width: 2 }, 
+      { key: "ask", color: "red", width: 2 },
+      { key: "mid", color: "#3c526b", width: 4 },
+      { key: "brk", color: "#c28e29", width: 4, dashed: true }
+    ]);
+
+    const keys = ["bid", "ask", "mid", "brk"]
+    // keys.forEach(key => {
+    //   keyStyle[key].label = {
+    //     normal: { color: 'white' },
+    //     highlighted: { color: 'white' },
+    //     selected: { color: 'white' },
+    //     muted: { color: 'white' }
+    //   }
+    // })
+
     return (
       <Div>
-        {!focus ? `Select a contract` :
+        {!focus ? `Default Graph` :
         <>
           <ChartContainer
             timeRange={series.range()}
@@ -65,8 +78,8 @@ class Graph extends React.Component {
                   showGrid={true}
                   id="axis1" 
                   label="$"
-                  min={0.8*series.min("bid")}
-                  max={1.25*series.max("ask")}
+                  min={0.9*series.min("bid")}
+                  max={1.11*series.max("ask")}
                   width="40"
                   type="linear"
                   format=",.0f"/>
@@ -74,9 +87,9 @@ class Graph extends React.Component {
                     <LineChart
                       axis="axis1"
                       series={series}
-                      columns={["bid", "ask", "mid"]}
+                      columns={["bid", "ask", "mid", "brk"]}
                       interpolation={"curveLinear"}
-                      style={upDownStyle}
+                      style={keyStyle}
                     />
                     <CrossHairs x={this.state.x} y={this.state.y} />
                 </Charts>
@@ -84,12 +97,14 @@ class Graph extends React.Component {
           </ChartContainer>
           <Legend
             type="swatch"
-            style={upDownStyle}
+            style={keyStyle}
             categories={[
                 { key: "bid", label: "BID" },
                 { key: "ask", label: "ASK" },
-                { key: "mid", label: "MID" }
+                { key: "mid", label: "MID" },
+                { key: "brk", label: "BREAKEVEN" }
             ]}
+            // labelStyle={labelStyle}
           />
         </>
         }
@@ -99,9 +114,12 @@ class Graph extends React.Component {
 }
 
 const Div = styled.div`
-height: 100%; 
-border: 1px solid black;
-align-items: center;
+  background-color: ${props => props.theme.bgCard1};
+  border-bottom: 1px solid ${props => props.theme.borderCard};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 export default Graph;

@@ -12,8 +12,10 @@ class Chat extends React.Component {
 }
 
 const Div = styled.div`
-height: 100%; 
-border: 1px solid black;
+  border: 3px solid ${props => props.theme.borderCard};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default Chat;

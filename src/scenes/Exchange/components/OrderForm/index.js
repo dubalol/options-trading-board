@@ -5,7 +5,7 @@ class OrderForm extends React.Component {
     const { focus } = this.props;
     return (
       <Div>
-        {!focus && `Select a contract`}
+        {!focus && `Default Order Form`}
         {focus && `Form for ${this.props.focus.label}`}
       </Div>
     )
@@ -13,8 +13,11 @@ class OrderForm extends React.Component {
 }
 
 const Div = styled.div`
-height: 100%; 
-border: 1px solid black;
+  background-color: ${props => props.theme.bgCard1};
+  border-bottom: 1px solid ${props => props.theme.borderCard};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default OrderForm;
