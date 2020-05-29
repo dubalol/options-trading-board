@@ -1,6 +1,8 @@
+import moment from "moment";
+
 export const getContracts = async () => {
   // adjust ts to prior business day?
-  const ts = '2020-05-25T00:00:00.000Z';
+  const ts = moment().toISOString()
   const limit = 0;
 
   const proxyURL = 'https://cors-anywhere.herokuapp.com';
