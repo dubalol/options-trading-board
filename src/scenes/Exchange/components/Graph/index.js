@@ -26,13 +26,6 @@ class Graph extends React.Component {
   render() {
     const { focus } = this.props;
 
-    const history = [
-      [1400425947000, 7, 9, 8],
-      [1400425948000, 10, 20, 15],
-      [1400425949000, 12, 16, 14],
-      [1400425950000, 10, 14, 12]
-    ]
-
     const data = {
       name: "balance",
       columns: ["time", "bid", "ask", "mid", "brk"],
@@ -48,15 +41,31 @@ class Graph extends React.Component {
       { key: "brk", color: "#c28e29", width: 4, dashed: true }
     ]);
 
-    const keys = ["bid", "ask", "mid", "brk"]
-    // keys.forEach(key => {
-    //   keyStyle[key].label = {
-    //     normal: { color: 'white' },
-    //     highlighted: { color: 'white' },
-    //     selected: { color: 'white' },
-    //     muted: { color: 'white' }
+    const axisStyle = { 
+      label: { 
+        stroke: "none", fill: "grey",
+        fontWeight: 100, fontSize: 12, font: '"Goudy Bookletter 1911", sans-serif"' 
+      }, 
+      values: { 
+        stroke: "none", fill: "grey",
+        fontWeight: 100, fontSize: 11, font: '"Goudy Bookletter 1911", sans-serif"' 
+      }, 
+      ticks: { fill: "none", stroke: "#252b33" }, 
+      axis: { fill: "none", stroke: "#252b33" }
+    }
+
+    // const legendStyle = {
+    //   label: { 
+    //     normal: {
+    //       fontSize: "normal", color: "grey"
+    //     }
+    //   },
+    //   values: {
+    //     normal: {
+    //       fontSize: "normal", color: "grey"
+    //     }
     //   }
-    // })
+    // }
 
     return (
       <Div>
@@ -65,14 +74,14 @@ class Graph extends React.Component {
           <ChartContainer
             timeRange={series.range()}
             hideTimeAxis={true}
-            width={300}
+            width={340}
             format={"%b-%d"}
             // minDuration={1000 * 60 * 60 * 24}
             onMouseMove={(x, y) => this.handleMouseMove(x, y)} 
             onMouseOut={() => this.handleMouseOut()}
           >
             <ChartRow 
-              height="200">
+              height="170">
                 <YAxis 
                   hideAxisLine={true}
                   showGrid={true}
@@ -82,7 +91,9 @@ class Graph extends React.Component {
                   max={1.11*series.max("ask")}
                   width="40"
                   type="linear"
-                  format=",.0f"/>
+                  format=",.0f"
+                  style={axisStyle}
+                  />
                 <Charts>
                     <LineChart
                       axis="axis1"
@@ -104,7 +115,7 @@ class Graph extends React.Component {
                 { key: "mid", label: "MID" },
                 { key: "brk", label: "BREAKEVEN" }
             ]}
-            // labelStyle={labelStyle}
+            // labelStyle={legendStyle}
           />
         </>
         }
