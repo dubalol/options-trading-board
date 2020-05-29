@@ -19,7 +19,7 @@ class App extends React.Component {
     const { dispatch } = this.props;
     dispatch(setInitialDataIfNeeded())
     const host = `ws://localhost:3000`;
-    dispatch(wsConnect(host));
+    // dispatch(wsConnect(host));
   };
 
   render() {

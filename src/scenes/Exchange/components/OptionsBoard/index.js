@@ -5,20 +5,21 @@ import styled from "styled-components";
 import ColumnNames from "./components/ColumnNames"
 import Header from "./components/Header"
 import Row from "./components/Row"
-
+import Spinner from "./components/Spinner"
 
 import {updateBookTop} from "../../../../services/options/actions"
 
 const mapStateToProps = (state) => ({
   optionsMap: state.optionsMap,
   activeDayAhead: state.contracts[state.currentDayAheadId],
-  focusedContract: state.contracts[state.focusedContract]
+  focusedContract: state.contracts[state.focusedContract],
+  isInitiallySet: state.isInitiallySet
 })
 
 class OptionsBoard extends React.Component {
   render() {
     const board = [];
-    const { optionsMap, priceBTC } = this.props;
+    const { optionsMap, priceBTC, isInitiallySet } = this.props;
 
     if (optionsMap) {
       const sortedExpiryDates = Object.keys(optionsMap).sort();
@@ -42,10 +43,12 @@ class OptionsBoard extends React.Component {
     }
 
     return (
-      <Div>
+      isInitiallySet ? 
+        <Div>
           <ColumnNames />
           {board}
-      </Div>
+        </Div> : 
+        <Div><Spinner /></Div>
     )
   }
 }
