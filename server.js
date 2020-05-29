@@ -2,11 +2,15 @@ const WebSocket = require('ws')
 const fetch = require('node-fetch');
 const express = require('express');
 const moment = require('moment');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
 const server = app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
+app.use(express.static('dist'))
+
+app.get('/', (req, res) => res.send(path.resolve(__dirname, '/dist/index.html'))) 
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');

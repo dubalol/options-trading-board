@@ -19,7 +19,7 @@ class App extends React.Component {
 
   connectToAPIs() {
     const { dispatch } = this.props;
-    const host = `ws://localhost:3000`;
+    const host = `ws://${window.location.hostname}:${window.location.port}`;
     dispatch(setInitialDataIfNeeded())
     dispatch(wsConnect(host));
   };
