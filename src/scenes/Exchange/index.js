@@ -44,7 +44,6 @@ class Exchange extends React.Component {
 
     let priceBTC = 0;
     if (activeDayAhead) priceBTC = (activeDayAhead.ask + activeDayAhead.bid) / 2
-    // const { ask, bid } = activeDayAhead;
 
     if (networkError) return(<div>Unexpected network error</div>)
     return(

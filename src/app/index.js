@@ -1,10 +1,12 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 
 import { wsConnect, wsDisconnect } from '../services/options/actions';
 import { setInitialDataIfNeeded, updateBookTop } from "../services/options/actions";
 
-import Exchange from '../scenes/Exchange'
+// import Exchange from '../scenes/Exchange'
+const Exchange = React.lazy(() => import('../scenes/Exchange'))
 
 const mapStateToProps = (state) => ({
   messages: state.messages
@@ -17,20 +19,24 @@ class App extends React.Component {
 
   connectToAPIs() {
     const { dispatch } = this.props;
-    dispatch(setInitialDataIfNeeded())
     const host = `ws://localhost:3000`;
-    // dispatch(wsConnect(host));
+    dispatch(setInitialDataIfNeeded())
+    dispatch(wsConnect(host));
   };
 
   render() {
-    const { dispatch } = this.props;
     return(
-      <div>
-        {/* <button onClick={() => dispatch(updateBookTop())}>Updater</button> */}
+      <Suspense fallback={<Div>Loading...</Div>}>
         <Exchange />
-      </div>
+      </Suspense>
     )
   }
 }
+
+const Div = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default connect(mapStateToProps)(App);

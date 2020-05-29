@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-class TradeBlotter extends React.Component {
+class PortfolioBar extends React.Component {
   render() {
     const { activeDayAhead } = this.props;
     return(
@@ -38,4 +38,4 @@ const Span = styled.span`
   justify-content: center;
 `;
 
-export default TradeBlotter;
+export default PortfolioBar;

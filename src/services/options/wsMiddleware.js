@@ -18,6 +18,7 @@ const socketMiddleware = () => {
 
     switch (msg.type) {
       case 'book_top':
+        // Only dispatch updates if store is ready
         if (store.getState().isInitiallySet) store.dispatch(actions.updateBookTop(msg));
         break;
       default:

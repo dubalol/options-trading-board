@@ -19,19 +19,17 @@ export const updateBookTop = data => ({ type: UPDATE_BOOK_TOP, payload: data})
 
 
 // Contract and Book Top actions
-const requestContracts = () => ({ type: REQUEST_CONTRACTS })
+const networkError = () => ({ type: NETWORK_ERROR })
 
+const requestContracts = () => ({ type: REQUEST_CONTRACTS })
 const receiveContracts = (data) => ({ type: RECEIVE_CONTRACTS, payload: data })
 
 const mapOptions = () => ({ type: MAP_OPTIONS })
-
 export const focusContract = (data) => ({ type: FOCUS_CONTRACT, payload: data })
 
 const requestBookTops = () => ({ type: REQUEST_BOOK_TOPS })
-
 const receiveBookTops = (data) => ({ type: RECEIVE_BOOK_TOPS, payload: data })
 
-const networkError = () => ({ type: NETWORK_ERROR })
 
 const setInitialData = () => {
   return async (dispatch) => {
@@ -39,6 +37,7 @@ const setInitialData = () => {
     await getContracts()
       .then(data => dispatch(receiveContracts(data)))
       .catch(() => dispatch(networkError()))
+
     dispatch(mapOptions());
     dispatch(requestBookTops());
     await getBookTops()

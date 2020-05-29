@@ -14,8 +14,8 @@ app.use((req, res, next) => {
 });
 
 app.get('/api/contracts', (req, res) => {
-  const yesterday = moment().subtract(1, "days").toISOString();
-  return fetch(`https://trade.ledgerx.com/api/contracts?after_ts=${yesterday}&limit=0`)
+  const ts = moment().subtract(1, "days").toISOString();
+  return fetch(`https://trade.ledgerx.com/api/contracts?after_ts=${ts}&limit=0`)
     .then(response => response.json())
     .then(json => res.send(json))
   }

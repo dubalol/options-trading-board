@@ -37,8 +37,8 @@ class Graph extends React.Component {
     const keyStyle = styler([
       { key: "bid", color: "green", width: 2 }, 
       { key: "ask", color: "red", width: 2 },
-      { key: "mid", color: "#3c526b", width: 4 },
-      { key: "brk", color: "#c28e29", width: 4, dashed: true }
+      { key: "mid", color: "#1ec2f2", width: 4 },
+      { key: "brk", color: "#c28e29", width: 3, dashed: true }
     ]);
 
     const axisStyle = { 
@@ -54,6 +54,7 @@ class Graph extends React.Component {
       axis: { fill: "none", stroke: "#252b33" }
     }
 
+    // ! Need to get to the bottom of this
     // const legendStyle = {
     //   label: { 
     //     normal: {
@@ -87,8 +88,8 @@ class Graph extends React.Component {
                   showGrid={true}
                   id="axis1" 
                   label="$"
-                  min={0.9*series.min("bid")}
-                  max={1.11*series.max("ask")}
+                  min={series.min("bid") - (0.2*(series.min("ask") - series.max("bid")))}
+                  max={series.max("ask") + (0.2*(series.min("ask") - series.max("bid")))}
                   width="40"
                   type="linear"
                   format=",.0f"

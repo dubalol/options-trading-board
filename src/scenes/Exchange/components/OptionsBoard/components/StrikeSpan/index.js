@@ -1,15 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-import PriceBreak from "../PriceBreak"
-
 class StrikeSpan extends React.Component {
   render() {
     const { strike, isPriceBreak, breakOffset, isEven } = this.props; 
     return(
       <Span isEven={isEven}>
         <b>{Number.parseInt(strike).toLocaleString()}</b>
-        {/* {isPriceBreak && <PriceBreak offset={breakOffset}/>} */}
       </Span>
     )
   }

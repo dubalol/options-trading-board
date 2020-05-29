@@ -19,7 +19,8 @@ const themes = {
     textWorsePrice: '#e19696',
     borderCard: '#3c526b',
     moneyline: '#c28e29'
-  }
+  },
+  light: {}
 }
 
 export default themes;

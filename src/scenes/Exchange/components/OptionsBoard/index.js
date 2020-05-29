@@ -7,7 +7,7 @@ import Header from "./components/Header"
 import Row from "./components/Row"
 import Spinner from "./components/Spinner"
 
-import {updateBookTop} from "../../../../services/options/actions"
+import { updateBookTop } from "../../../../services/options/actions"
 
 const mapStateToProps = (state) => ({
   optionsMap: state.optionsMap,
@@ -31,8 +31,7 @@ class OptionsBoard extends React.Component {
 
         sortedStrikes.forEach((strike, index) => {
           const isPriceBreak = (strike <= priceBTC && sortedStrikes[index + 1] >= priceBTC);
-          const breakOffset = 0;
-
+          const breakOffset = 0; // Can calculate pixel offset to more accurately display money line
           const row = <Row 
             strike={strike} contracts={optionsMap[date][strike]} key={date+strike}
             isPriceBreak={isPriceBreak} breakOffset={breakOffset} isEven={index % 2 === 0}

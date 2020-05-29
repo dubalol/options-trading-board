@@ -2,7 +2,7 @@ import moment from "moment";
 
 export const getContracts = async () => {
   // const ts = "2020-05-28T00:00:00.000Z"
-  // const ts = moment().toISOString()
+  // const ts = moment().subtract(1, "days").toISOString();
   // const limit = 0;
 
   // const proxyURL = 'https://cors-anywhere.herokuapp.com';
