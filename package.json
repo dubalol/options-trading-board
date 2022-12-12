@@ -16,7 +16,7 @@
     "@emotion/styled": "^10.0.27",
     "babel-polyfill": "^6.26.0",
     "emotion": "^10.0.27",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "immer": "^6.0.8",
     "lodash": "^4.17.15",
     "moment": "^2.26.0",
